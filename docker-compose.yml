@@ -1,29 +1,37 @@
-version: "3"
+version: '3'
 
 services:
-    mariadb:
-        image: mariadb:latest
-        environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: dolibarr
-        ports:
-         - "3310:3306"
 
-    web:
-        image: tuxgasy/dolibarr
-        environment:
-            DOLI_DB_HOST: mariadb
-            DOLI_DB_USER: root
-            DOLI_DB_PASSWORD: root
-            DOLI_DB_NAME: dolibarr
-            DOLI_URL_ROOT: 'http://0.0.0.0'
-            PHP_INI_DATE_TIMEZONE: 'Europe/Paris'
-            DOLI_ADMIN_LOGIN: test
-            DOLI_ADMIN_PASSWORD: test
+  mariadb:
+    image: mariadb:10.4.12
+    container_name: mariadb_ecomusic
+    restart: unless-stopped
+    command: --character_set_client=utf8 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3310:3306"
+    environment:
+      - MYSQL_DATABASE=dolibarr
+      - MYSQL_USER=dolibarr
+      - MYSQL_PASSWORD=dolibarr
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
 
-        volumes:
-        - ./documents:/var/www/documents
-        ports:
-            - "8090:80"
-        links:
-            - mariadb
+  dolibarr:
+    image: upshift/dolibarr:latest
+    container_name: dolibarr_ecomusic
+    restart: unless-stopped
+    depends_on:
+        - mariadb
+    ports:
+        - "8090:80"
+    environment:
+      - DOLI_ADMIN_LOGIN=test
+      - DOLI_ADMIN_PASSWORD=test
+      - DOLI_DB_HOST=mariadb
+      - DOLI_DB_NAME=dolibarr
+      - DOLI_DB_USER=dolibarr
+      - DOLI_DB_PASSWORD=dolibarr
+      - TZ=Europe/Madrid 
+      - LANG=es_ES
+    volumes:
+      - ./doli_html:/var/www/html
+      - ./doli_docs:/var/www/documents
