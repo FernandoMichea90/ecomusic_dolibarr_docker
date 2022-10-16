@@ -1,0 +1,53 @@
+# Copyright (C) 2022 SuperAdmin
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#
+# Generic
+#
+
+# Module label 'ModuleReservasHotelName'
+ModuleReservasHotelName = ReservasHotel
+# Module description 'ModuleReservasHotelDesc'
+ModuleReservasHotelDesc = ReservasHotel description
+
+#
+# Admin page
+#
+ReservasHotelSetup = ReservasHotel setup
+Settings = Settings
+ReservasHotelSetupPage = ReservasHotel setup page
+RESERVASHOTEL_MYPARAM1 = My param 1
+RESERVASHOTEL_MYPARAM1Tooltip = My param 1 tooltip
+RESERVASHOTEL_MYPARAM2=My param 2
+RESERVASHOTEL_MYPARAM2Tooltip=My param 2 tooltip
+
+
+#
+# About page
+#
+About = About
+ReservasHotelAbout = About ReservasHotel
+ReservasHotelAboutPage = ReservasHotel about page
+
+#
+# Sample page
+#
+MyPageName = My page name
+
+#
+# Sample widget
+#
+MyWidget = My widget
+MyWidgetDescription = My widget description
