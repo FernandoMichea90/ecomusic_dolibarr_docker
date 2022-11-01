@@ -22,7 +22,6 @@ CREATE TABLE llx_reservashotel_reservas(
 	amount double DEFAULT NULL, 
 	qty real, 
 	fk_soc integer, 
-	fk_project integer, 
 	description text, 
 	note_public text, 
 	note_private text, 
@@ -34,6 +33,13 @@ CREATE TABLE llx_reservashotel_reservas(
 	import_key varchar(14), 
 	model_pdf varchar(255), 
 	status integer NOT NULL, 
-	check_in datetime
+	check_in date, 
+	check_out date, 
+	factura integer, 
+	habitacion integer NOT NULL, 
+	extranjero boolean, 
+	procedencia integer, 
+	Estado integer, 
+	estado_pago integer
 	-- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;

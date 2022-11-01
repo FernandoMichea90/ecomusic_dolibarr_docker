@@ -18,7 +18,6 @@
 ALTER TABLE llx_reservashotel_reservas ADD INDEX idx_reservashotel_reservas_rowid (rowid);
 ALTER TABLE llx_reservashotel_reservas ADD INDEX idx_reservashotel_reservas_ref (ref);
 ALTER TABLE llx_reservashotel_reservas ADD INDEX idx_reservashotel_reservas_fk_soc (fk_soc);
-ALTER TABLE llx_reservashotel_reservas ADD INDEX idx_reservashotel_reservas_fk_project (fk_project);
 ALTER TABLE llx_reservashotel_reservas ADD CONSTRAINT llx_reservashotel_reservas_fk_user_creat FOREIGN KEY (fk_user_creat) REFERENCES llx_user(rowid);
 ALTER TABLE llx_reservashotel_reservas ADD INDEX idx_reservashotel_reservas_status (status);
 -- END MODULEBUILDER INDEXES
