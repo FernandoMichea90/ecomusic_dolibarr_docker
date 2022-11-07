@@ -492,6 +492,7 @@ class Facture extends CommonInvoice
 			return -3;
 		}
 		$soc = new Societe($this->db);
+		dol_syslog('el parametro que estoy pasando es  '.$this->socid,6);
 		$result = $soc->fetch($this->socid);
 		if ($result < 0) {
 			$this->error = "Failed to fetch company: ".$soc->error;

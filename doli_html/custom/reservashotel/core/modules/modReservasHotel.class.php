@@ -88,7 +88,7 @@ class modReservasHotel extends DolibarrModules
 		// Define some features supported by module (triggers, login, substitutions, menus, css, etc...)
 		$this->module_parts = array(
 			// Set this to 1 if module has its own trigger directory (core/triggers)
-			'triggers' => 0,
+			'triggers' => 1,
 			// Set this to 1 if module has its own login method file (core/login)
 			'login' => 0,
 			// Set this to 1 if module has its own substitution function file (core/substitutions)
@@ -115,10 +115,10 @@ class modReservasHotel extends DolibarrModules
 			),
 			// Set here all hooks context managed by module. To find available hook context, make a "grep -r '>initHooks(' *" on source code. You can also set hook context to 'all'
 			'hooks' => array(
-				//   'data' => array(
-				//       'hookcontext1',
-				//       'hookcontext2',
-				//   ),
+				  'data' => array(
+				      'reservascard',
+				      'hookcontext2',
+				  ),
 				//   'entity' => '0',
 			),
 			// Set this to 1 if features of module are opened to external users
@@ -368,7 +368,48 @@ class modReservasHotel extends DolibarrModules
             // 0=Menu for internal users, 1=external users, 2=both
             'user'=>2,
         );
+        
+           $this->menu[$r++]=array(
+            // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+            'fk_menu'=>'fk_mainmenu=reservashotel',
+            // This is a Left menu entry
+            'type'=>'left',
+            'titre'=>'List Reservas 2',
+            'mainmenu'=>'reservashotel',
+            'leftmenu'=>'reservashotel_reservas',
+            'url'=>'/reservashotel/reservas_list.php',
+            // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+            'langs'=>'reservashotel@reservashotel',
+            'position'=>1100+$r,
+            // Define condition to show or hide menu entry. Use '$conf->reservashotel->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+            'enabled'=>'$conf->reservashotel->enabled',
+            // Use 'perms'=>'$user->rights->reservashotel->level1->level2' if you want your menu with a permission rules
+            'perms'=>'1',
+            'target'=>'',
+            // 0=Menu for internal users, 1=external users, 2=both
+            'user'=>2,
+        );
         $this->menu[$r++]=array(
+            // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+            'fk_menu'=>'fk_mainmenu=reservashotel',
+            // This is a Left menu entry
+            'type'=>'left',
+            'titre'=>'New Reservas',
+            'mainmenu'=>'reservashotel',
+            'leftmenu'=>'reservashotel_reservas',
+            'url'=>'/reservashotel/reservas_card.php?action=create',
+            // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+            'langs'=>'reservashotel@reservashotel',
+            'position'=>1100+$r,
+            // Define condition to show or hide menu entry. Use '$conf->reservashotel->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+            'enabled'=>'$conf->reservashotel->enabled',
+            // Use 'perms'=>'$user->rights->reservashotel->level1->level2' if you want your menu with a permission rules
+            'perms'=>'1',
+            'target'=>'',
+            // 0=Menu for internal users, 1=external users, 2=both
+            'user'=>2
+        );
+           $this->menu[$r++]=array(
             // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
             'fk_menu'=>'fk_mainmenu=reservashotel,fk_leftmenu=reservashotel_reservas',
             // This is a Left menu entry
@@ -389,6 +430,47 @@ class modReservasHotel extends DolibarrModules
             'user'=>2
         );
 
+
+         $this->menu[$r++]=array(
+            // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+            'fk_menu'=>'fk_mainmenu=reservashotel,fk_leftmenu=reservashotel_reservas',
+            // This is a Left menu entry
+            'type'=>'left',
+            'titre'=>'Crear Reservas',
+            'mainmenu'=>'reservashotel',
+            'leftmenu'=>'reservashotel_reservas',
+            'url'=>'/reservashotel/reservas_card.php?action=create',
+            // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+            'langs'=>'reservashotel@reservashotel',
+            'position'=>1100+$r,
+            // Define condition to show or hide menu entry. Use '$conf->reservashotel->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+            'enabled'=>'$conf->reservashotel->enabled',
+            // Use 'perms'=>'$user->rights->reservashotel->level1->level2' if you want your menu with a permission rules
+            'perms'=>'1',
+            'target'=>'',
+            // 0=Menu for internal users, 1=external users, 2=both
+            'user'=>2
+        );
+          $this->menu[$r++]=array(
+            // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
+            'fk_menu'=>'fk_mainmenu=reservashotel,fk_leftmenu=reservashotel_reservas',
+            // This is a Left menu entry
+            'type'=>'left',
+            'titre'=>'Crear Reservas',
+            'mainmenu'=>'reservashotel',
+            'leftmenu'=>'reservashotel_reservas',
+            'url'=>'/reservashotel/reservas_card.php?action=create',
+            // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+            'langs'=>'reservashotel@reservashotel',
+            'position'=>1100+$r,
+            // Define condition to show or hide menu entry. Use '$conf->reservashotel->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+            'enabled'=>'$conf->reservashotel->enabled',
+            // Use 'perms'=>'$user->rights->reservashotel->level1->level2' if you want your menu with a permission rules
+            'perms'=>'1',
+            'target'=>'',
+            // 0=Menu for internal users, 1=external users, 2=both
+            'user'=>2
+        );
 		/* END MODULEBUILDER LEFTMENU RESERVAS */
 		// Exports profiles provided by this module
 		$r = 1;
