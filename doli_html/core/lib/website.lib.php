@@ -31,6 +31,8 @@
  */
 function dolStripPhpCode($str, $replacewith = '')
 {
+	$str = str_replace('<?=', '<?php', $str);
+
 	$newstr = '';
 
 	//split on each opening tag
@@ -71,6 +73,8 @@ function dolStripPhpCode($str, $replacewith = '')
  */
 function dolKeepOnlyPhpCode($str)
 {
+	$str = str_replace('<?=', '<?php', $str);
+
 	$newstr = '';
 
 	//split on each opening tag
@@ -467,7 +471,7 @@ function redirectToContainer($containerref, $containeraliasalt = '', $containeri
 		if ($permanent) {
 			header("Status: 301 Moved Permanently", false, 301);
 		}
-		header("Location: ".$newurl);
+		header("Location: ".$newurl.(empty($_SERVER["QUERY_STRING"]) ? '' : '?'.$_SERVER["QUERY_STRING"]));
 		exit;
 	} else {
 		print "Error, page contains a redirect to the alias page '".$containerref."' that does not exists in web site (".$website->id." / ".$website->ref.")";
@@ -495,7 +499,7 @@ function includeContainer($containerref)
 		$containerref .= '.php';
 	}
 
-	$fullpathfile = DOL_DATA_ROOT.'/website/'.$websitekey.'/'.$containerref;
+	$fullpathfile = DOL_DATA_ROOT.($conf->entity > 1 ? '/'.$conf->entity : '').'/website/'.$websitekey.'/'.$containerref;
 
 	if (empty($includehtmlcontentopened)) {
 		$includehtmlcontentopened = 0;
@@ -943,11 +947,11 @@ function getPagesFromSearchCriterias($type, $algo, $searchstring, $max = 25, $so
 		$sql .= " AND (";
 		$searchalgo = '';
 		if (preg_match('/meta/', $algo)) {
-			$searchalgo .= ($searchalgo ? ' OR ' : '')."wp.title LIKE '%".$db->escapeunderscore($db->escape($searchstring))."%' OR wp.description LIKE '%".$db->escapeunderscore($db->escape($searchstring))."%'";
-			$searchalgo .= ($searchalgo ? ' OR ' : '')."wp.keywords LIKE '".$db->escapeunderscore($db->escape($searchstring)).",%' OR wp.keywords LIKE '% ".$db->escapeunderscore($db->escape($searchstring))."%'"; // TODO Use a better way to scan keywords
+			$searchalgo .= ($searchalgo ? ' OR ' : '')."wp.title LIKE '%".$db->escapeforlike($db->escape($searchstring))."%' OR wp.description LIKE '%".$db->escapeforlike($db->escape($searchstring))."%'";
+			$searchalgo .= ($searchalgo ? ' OR ' : '')."wp.keywords LIKE '".$db->escapeforlike($db->escape($searchstring)).",%' OR wp.keywords LIKE '% ".$db->escapeforlike($db->escape($searchstring))."%'"; // TODO Use a better way to scan keywords
 		}
 		if (preg_match('/content/', $algo)) {
-			$searchalgo .= ($searchalgo ? ' OR ' : '')."wp.content LIKE '%".$db->escapeunderscore($db->escape($searchstring))."%'";
+			$searchalgo .= ($searchalgo ? ' OR ' : '')."wp.content LIKE '%".$db->escapeforlike($db->escape($searchstring))."%'";
 		}
 		$sql .= $searchalgo;
 		if (is_array($otherfilters) && !empty($otherfilters['category'])) {
@@ -984,7 +988,7 @@ function getPagesFromSearchCriterias($type, $algo, $searchstring, $max = 25, $so
 	if (!$error && (empty($max) || ($found < $max)) && (preg_match('/sitefiles/', $algo))) {
 		global $dolibarr_main_data_root;
 
-		$pathofwebsite = $dolibarr_main_data_root.'/website/'.$website->ref;
+		$pathofwebsite = $dolibarr_main_data_root.($conf->entity > 1 ? '/'.$conf->entity : '').'/website/'.$website->ref;
 		$filehtmlheader = $pathofwebsite.'/htmlheader.html';
 		$filecss = $pathofwebsite.'/styles.css.php';
 		$filejs = $pathofwebsite.'/javascript.js.php';

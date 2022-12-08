@@ -95,13 +95,13 @@ class ActionsReservasHotel
 	public function doActions($parameters, &$object, &$action, $hookmanager)
 	{
 		global $conf, $user, $langs;
-		print '<script type="text/javascript">
-		alert("' . $action . '");
-		</script>';
+		// print '<script type="text/javascript">
+		// alert("' . $action . '");
+		// </script>';
 
-		print '<script type="text/javascript">
-		alert(' . json_encode($parameters) . '");
-		</script>';
+		// print '<script type="text/javascript">
+		// alert(' . json_encode($parameters) . '");
+		// </script>';
 		$error = 0; // Error counter
 		/* print_r($parameters); print_r($object); echo "action: " . $action; */
 		if (in_array($parameters['currentcontext'], array('reservascard', 'somecontext2'))) {	    // do something only for the context 'somecontext1' or 'somecontext2'

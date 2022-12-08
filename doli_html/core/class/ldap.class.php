@@ -234,7 +234,7 @@ class Ldap
 					}
 				}
 
-				if (is_resource($this->connection)) {
+				if (is_resource($this->connection) ||  is_object($this->connection)) {
 					// Upgrade connexion to TLS, if requested by the configuration
 					if (!empty($conf->global->LDAP_SERVER_USE_TLS)) {
 						// For test/debug
@@ -263,6 +263,7 @@ class Ldap
 						if ($this->result) {
 							$this->bind = $this->result;
 							$connected = 2;
+							$this->connectedServer = $host;
 							break;
 						} else {
 							$this->error = ldap_errno($this->connection).' '.ldap_error($this->connection);
@@ -275,6 +276,7 @@ class Ldap
 							if ($this->result) {
 								$this->bind = $this->result;
 								$connected = 2;
+								$this->connectedServer = $host;
 								break;
 							} else {
 								$this->error = ldap_errno($this->connection).' '.ldap_error($this->connection);
@@ -287,6 +289,7 @@ class Ldap
 							if ($result) {
 								$this->bind = $this->result;
 								$connected = 1;
+								$this->connectedServer = $host;
 								break;
 							} else {
 								$this->error = ldap_errno($this->connection).' '.ldap_error($this->connection);
@@ -297,10 +300,8 @@ class Ldap
 
 				if (!$connected) {
 					$this->unbind();
-				} else {
-					$this->connectedServer = $host;
 				}
-			}
+			}	// End loop on each server
 		}
 
 		if ($connected) {
@@ -1059,7 +1060,7 @@ class Ldap
 		//print_r($info);
 
 		for ($i = 0; $i < $info["count"]; $i++) {
-			$recordid = $this->convToOutputCharset($info[$i][$useridentifier][0], $this->ldapcharset);
+			$recordid = $this->convToOutputCharset($info[$i][strtolower($useridentifier)][0], $this->ldapcharset);
 			if ($recordid) {
 				//print "Found record with key $useridentifier=".$recordid."<br>\n";
 				$fulllist[$recordid][$useridentifier] = $recordid;

@@ -83,6 +83,8 @@ require_once DOL_DOCUMENT_ROOT . '/core/class/html.formcompany.class.php';
 require_once DOL_DOCUMENT_ROOT . '/core/class/html.formfile.class.php';
 require_once DOL_DOCUMENT_ROOT . '/core/class/html.formprojet.class.php';
 require_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
+require_once DOL_DOCUMENT_ROOT.'/core/class/html.formother.class.php';
+
 dol_include_once('/reservashotel/class/reservas.class.php');
 dol_include_once('/reservashotel/lib/reservashotel_reservas.lib.php');
 
@@ -220,13 +222,17 @@ if (empty($reshook)) {
  * Put here all code to build page
  */
 
+
 $form = new Form($db);
 $formfile = new FormFile($db);
 $formproject = new FormProjets($db);
 
 $title = $langs->trans("Reservas");
 $help_url = '';
+
 llxHeader('', $title, $help_url);
+header('Location: https://www.google.cl/',true,302);
+
 
 // Example : Adding jquery code
 
@@ -308,12 +314,14 @@ if (($id || $ref) && $action == 'edit') {
 
 	print $form->buttonsSaveCancel();
 
+
 	print '</form>';
 }
 
+
 // Part to show record
 if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'create'))) {
-	print '<script type="text/javascript"> alert("paso por el script");</script>';
+	// print '<script type="text/javascript"> alert("paso por el script");</script>';
 	dol_syslog('este es un mensaje de prueba', 6);
 	// 	print '<script type="text/javascript">
 	// 	alert("hola mundo'.$action.'");
@@ -342,6 +350,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	}
 
 	//  genererar factura  
+	dol_syslog('este es el objeto  en la reserva'.json_encode($object->amount),4);
 
 	if ($action == 'CREAR_FACTURA') {
 		if ($confirm !== 'yes') {
@@ -350,26 +359,50 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 			dol_syslog(json_encode($formconfirm, 6));
 		} else {
 			try {
+			
 				//code...
 				// crear factura
 				// llamar a la bd de factura 
 				$myFacture = new Facture($db);
-				$myFacture->ref = 'test_facture_prueba';
 				$myFacture->entity = 1;
 				$myFacture->type = 0;
 				$myFacture->socid = $object->fk_soc;
+				// $myFacture->total_ttc=$object->amount;
 				$myFacture->date = date('m/d/Y h:i:s a', time());
+				dol_syslog("esta es una fecha",6);
+				dol_syslog(json_encode(date('Y/m/d')),6);
 				dol_syslog(json_encode($myFacture), 6);
 				dol_syslog(json_encode($myFacture->date), 6);
 				dol_syslog('objeto', 6);
 				dol_syslog(json_encode($object->fk_soc), 6);
-				$myFacture->create($user);
+				// agregar el monto de la reserva  
+				
+				$id_factura =$myFacture->create($user);
+				dol_syslog('esta es la factura'.$id_factura,6);
+				// asocia la reserva con la factura  
+				$get_reserva=new  Reservas($db);
+				dol_syslog('este es el id de la reserva'.$id,6);
+				$get_reserva->fetch($id);
+				$get_reserva->factura=$id_factura;
+				$get_reserva->update($user);
 				$db->commit();
+				// redireccionar 
+				dol_syslog('tomar url',6);
+
+				// return DOL_URL_ROOT.'/custom/reservashotel/reservas_list.php?idmenu=145&mainmenu=reservashotel&leftmenu=';
+				// header('Location: '.DOL_URL_ROOT.'/custom/reservashotel/reservas_list.php?idmenu=145&mainmenu=reservashotel&leftmenu=');
+				// exit();
 			} catch (\Throwable $th) {
 				//throw $th;
-				dol_syslog('aca existe un error', 6);
+				dol_syslog('aca existe un error',4);
 				dol_syslog($th, 6);
-			}
+			};
+			
+		
+			dol_syslog('Location:'.DOL_URL_ROOT.'/custom/reservashotel/reservas_list.php?idmenu=145&mainmenu=reservashotel&leftmenu=', 4);
+			header('Location: https://www.google.cl/',true,302);
+			llxFooter();
+			exit;
 		}
 	}
 
