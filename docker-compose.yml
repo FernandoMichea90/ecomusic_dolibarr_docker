@@ -16,7 +16,7 @@ services:
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
 
   dolibarr:
-    image: upshift/dolibarr:latest
+    image: upshift/dolibarr:16.0.3
     container_name: dolibarr_ecomusic
     restart: unless-stopped
     depends_on:

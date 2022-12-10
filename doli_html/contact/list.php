@@ -500,10 +500,19 @@ if (strlen($search_fax)) {
 if (!empty($conf->socialnetworks->enabled)) {
 	foreach ($socialnetworks as $key => $value) {
 		if ($value['active'] && strlen($search_[$key])) {
-			$sql .= " AND p.socialnetworks LIKE '%\"".$key."\":\"".$search_[$key]."%'";
+			$searchkeyinjsonformat = preg_replace('/"$/', '', preg_replace('/^"/', '', json_encode($search_[$key])));
+			if (in_array($db->type, array('mysql', 'mysqli'))) {
+				$sql .= " AND p.socialnetworks REGEXP '\"".$db->escape($db->escapeforlike($key))."\":\"[^\"]*".$db->escape($db->escapeforlike($searchkeyinjsonformat))."'";
+			} elseif ($db->type == 'pgsql') {
+				$sql .= " AND p.socialnetworks ~ '\"".$db->escape($db->escapeforlike($key))."\":\"[^\"]*".$db->escape($db->escapeforlike($searchkeyinjsonformat))."'";
+			} else {
+				// Works with all database but not reliable because search only for social network code starting with earched value
+				$sql .= " AND p.socialnetworks LIKE '%\"".$db->escape($db->escapeforlike($key))."\":\"".$db->escape($db->escapeforlike($searchkeyinjsonformat))."%'";
+			}
 		}
 	}
 }
+//print $sql;
 if (strlen($search_email)) {
 	$sql .= natural_search('p.email', $search_email);
 }
@@ -555,6 +564,7 @@ if ($view == "recent") {
 } else {
 	$sql .= $db->order($sortfield, $sortorder);
 }
+//print $sql;
 
 // Count total nb of records
 $nbtotalofrecords = '';
